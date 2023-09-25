@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://staging.madeofme.me/sitemap.xml

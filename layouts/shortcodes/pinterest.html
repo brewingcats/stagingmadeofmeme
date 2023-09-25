@@ -1,0 +1,6 @@
+{{ $src := cond (.IsNamedParams) (.Get "src" ) (.Get 0 ) }}
+{{ $width := cond (.IsNamedParams) (.Get "width" ) (.Get 1 ) }}
+{{ $height := cond (.IsNamedParams) (.Get "height" ) (.Get 2 ) }}
+<script async defer src="//assets.pinterest.com/js/pinit.js"></script>
+<a data-pin-do="embedBoard" data-pin-board-width="{{ $width }}" data-pin-scale-height="{{ $height }}" data-pin-scale-width="80" href="{{ $src }}"></a>
+<!--<a data-pin-do="embedBoard" data-pin-board-width="950" data-pin-scale-height="1000" data-pin-scale-width="80" href="https://www.pinterest.com/DarthOguh/narwhals/"></a> -->

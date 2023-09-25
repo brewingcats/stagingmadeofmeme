@@ -1,0 +1,73 @@
+{{ $lang := .Page.Params.lang }}
+<div class="custom-control custom-switch">
+  <input type="checkbox" class="custom-control-input" id="disableTelemetry" onclick="handleTelemetrySwitch()">
+  <label class="custom-control-label" for="disableTelemetry">
+    {{if $lang | eq "en" }}
+    Current Telemetry is: <code tag-id="telemetryStatusLabel-en">Enabled</code>
+    {{ else }}
+    La recolección de telemetría se encuentra: <code tag-id="telemetryStatusLabel-es">Habilitada</code>
+    {{ end }}</label>
+</div>
+<script>
+  let lang = "{{ $lang }}";
+  let labelSelector = `code[tag-id="telemetryStatusLabel-${lang}"]`;
+  let disabledTelemetry = window.localStorage.getItem('DisabledTelemetry');
+  if ('true' === disabledTelemetry) {
+    window.document.getElementById('disableTelemetry').checked = false;
+    if ('en' == lang) {
+      window.document.querySelector(labelSelector).innerHTML = 'Disabled';
+    } else {
+      window.document.querySelector(labelSelector).innerHTML = 'Deshabilitada';
+    }
+  } else {
+    window.document.getElementById('disableTelemetry').checked = true;
+    if ('en' == lang) {
+      window.document.querySelector(labelSelector).innerHTML = 'Enabled';
+    } else {
+      window.document.querySelector(labelSelector).innerHTML = 'Habilitada';
+    }
+  }
+
+  function handleTelemetrySwitch() {
+    let lang = "$lang";
+    let labelSelector = `code[tag-id="telemetryStatusLabel-${lang}"]`;
+    let enableTelemetry = window.document.getElementById('disableTelemetry').checked;
+    if (true === enableTelemetry) {
+      window.localStorage.removeItem('DisabledTelemetry');
+      BrewingCatsCore.Config.TelemetryEnabled = true;
+      BrewingCatsCore.Logger.traceInfo(
+        `Enabled Telemetry: Disabled -> Enabled`,
+        'telemetrybrs',
+        'tagId_8',
+        'Configuration',
+        {
+          'action': 'Enable'
+        }
+      );
+
+      if ('en' == lang) {
+        window.document.querySelector(labelSelector).innerHTML = 'Enabled';
+      } else {
+        window.document.querySelector(labelSelector).innerHTML = 'Habilitada';
+      }
+    } else {
+      BrewingCatsCore.Logger.traceInfo(
+        `Disabled Telemetry: Enabled -> Disabled`,
+        'telemetrybrs',
+        'tagId_9',
+        'Configuration',
+        {
+          'action': 'Disable'
+        }
+      );
+
+      window.localStorage.setItem('DisabledTelemetry', 'true');
+      BrewingCatsCore.Config.TelemetryEnabled = false;
+      if ('en' == lang) {
+        window.document.querySelector(labelSelector).innerHTML = 'Disabled';
+      } else {
+        window.document.querySelector(labelSelector).innerHTML = 'Deshabilitada';
+      }
+    }
+  }
+</script>

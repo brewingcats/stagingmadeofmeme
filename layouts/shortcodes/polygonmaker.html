@@ -1,0 +1,409 @@
+{{ $lang := .Page.Params.lang }}
+{{ $imglbl := cond (eq $lang "en") "Image:" "Imágen:" }}
+{{ $loadlbl := cond (eq $lang "en") "Load" "Cargar" }}
+{{ $keeplastlbl := cond (eq $lang "en") "Keep Last Used Tag" "Mantener Última Etiqueta" }}
+{{ $offsetxlbl := cond (eq $lang "en") "X Offset:" "Deplazamiento X:" }}
+{{ $offsetylbl := cond (eq $lang "en") "Y Offset:" "Deplazamiento Y:" }}
+{{ $sizelbl := cond (eq $lang "en") "Size:" "Tamaño:" }}
+{{ $waitinglbl := cond (eq $lang "en") "Waiting" "Esperando" }}
+{{ $clearlbl := cond (eq $lang "en") "Clear" "Borrar" }}
+{{ $startinglbl := cond (eq $lang "en") "Starting Point" "Coordenada Inicial" }}
+{{ $dataptslbl := cond (eq $lang "en") "Data Points:" "Datos Acumulados:" }}
+{{ $downloadlbl := cond (eq $lang "en") "Download" "Descargar" }}
+{{ $addtaglbl := cond (eq $lang "en") "Add a new tag" "Agregar Etiqueta" }}
+{{ $entertaglbl := cond (eq $lang "en") "Enter new tag:" "Ingresa nueva etiqueta:" }}
+{{ $applylbl := cond (eq $lang "en") "Apply" "Aplicar" }}
+{{ $recordinglbl := cond (eq $lang "en") "Recording" "Grabando" }}
+{{ $pointlbl := cond (eq $lang "en") "Point" "Coordenada" }}
+{{ $startlbl := cond (eq $lang "en") "Start" "Grabar" }}
+
+<form>
+  <br>
+  <!-- Load img remotely -->
+  <div id="img-loader" class="input-group mb-3" style="display: none;">
+    <span class="input-group-text">{{ $imglbl }}</span>
+    <input type="text" id="img-path" class="form-control" 
+    placeholder="https://source.unsplash.com/WLUHO9A_xik" 
+    aria-label="https://source.unsplash.com/WLUHO9A_xik"
+    aria-describedby="image-text-message">
+    <button id="load-photo" type="button" class="btn btn-primary">{{ $loadlbl }}</button>
+  </div>
+  <!-- Open local img -->
+  <div id="local-loader" class="input-group mb-3" style="display: none;">
+    <input type="file" id="local-img-path" class="form-control" 
+      name="image"
+      accept="image/*"
+      aria-describedby="image-text-message">
+    <button id="load-local-photo" type="button" class="btn btn-primary">{{ $loadlbl }}</button>
+  </div>
+  <br>
+  <div class="input-group mb-3">
+    <div class="input-group-text">
+      <input type="checkbox" id='repeat-used-tag' aria-label="Checkbox for following text input">
+    </div>
+    <span class="input-group-text">{{ $keeplastlbl }}</span>
+  </div>
+  <br>
+  <div class="input-group">
+    <span class="input-group-text">{{ $offsetxlbl }}</span>
+    <input type="text" id="offsetX" class="form-control" placeholder="0" aria-label="0" aria-describedby="textMessage" onkeypress="validateKey(event, 'X')">
+    <span class="input-group-text">{{ $offsetylbl }}</span>
+    <input type="text" id="offsetY" class="form-control" placeholder="0" aria-label="0" aria-describedby="textMessage" onkeypress="validateKey(event, 'Y')">
+    <span class="input-group-text">{{ $sizelbl }}</span>
+    <input type="text" id="node-size" class="form-control" placeholder="10" aria-label="10" aria-describedby="textMessage" >
+    <button id="record-poly" type="button" class="btn btn-primary" disabled>{{ $waitinglbl }}</button>
+    <button id="clear-poly" type="button" class="btn btn-primary" disabled onclick="clearResults()">{{ $clearlbl }}</button>
+  </div>
+</form>
+<br>
+<label id="progress-label">{{ $startinglbl }}: 0,0</label>
+<div id="canvas-container"></div>
+
+<label>{{ $dataptslbl }}</label>
+<br>
+<div id="export-link" style="display: none;">
+  <a id="export-data" href="data:application/octet-stream,field1%2Cfield2%0Afoo%2Cbar%0Agoo%2Cgai%0A" download="polygon.csv">{{ $downloadlbl }}</a>
+</div>
+<div id="resulting-points"></div>
+
+<div id="contextMenu" class="dropdown clearfix">
+  <ul class="dropdown-menu" id="menu-tags" role="menu" aria-labelledby="dropdownMenu" style="display:block; position:fixed; margin-bottom:5px;">
+    <li><a class="dropdown-item" id="add-new-tag-option" tabindex="-1" href="#" data-bs-toggle="modal" data-bs-target="#add-new-tag">{{ $addtaglbl }}</a></li>
+    <li class="dropdown-divider"></li>
+  </ul>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="add-new-tag" tabindex="-1" aria-labelledby="addNewTagLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="new-tag-description">{{ $entertaglbl }}</span>
+          </div>
+          <input type="text" class="form-control" id="new-tag-input-field" placeholder="Empty" aria-label="Empty" aria-describedby="new-tag-description" autofocus>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="applyNewTag()">{{ $applylbl }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  #contextMenu {
+    position: fixed;
+    display: none;
+    width: fit-content;
+    height: fit-content;
+  }
+</style>
+<script>
+  BrewingCatsCore.Logger.traceInfo(
+    `Polygonmaker Component`,
+    'component.polygonmaker',
+    'tagId_g',
+    'ComponentSetup',
+    {
+      'component': 'Polygonmaker',
+    }
+  );
+
+  var startPoint = {
+    x: -1,
+    y: -1
+  };
+
+  var recordingEnabled = false;
+  var source = '{{.Get 0}}';
+  var btn = window.document.getElementById('record-poly');
+  var clearBtn = window.document.getElementById('clear-poly');
+  var results = window.document.getElementById('resulting-points');
+  var lbl = window.document.getElementById('progress-label');
+  var exportData = window.document.getElementById('export-data');
+  window.document.getElementById('export-link').addEventListener('click', (e) => {
+    BrewingCatsCore.Logger.traceInfo(
+      `Downloading Interactions`,
+      'component.polygonmaker',
+      'tagId_i',
+      'ComponentInteraction',
+      {
+        'component': 'Polygonmaker',
+        'size': `${exportData.getAttribute('href').length}`
+      }
+    );
+  });
+  
+  var canvas;
+  var ctx;
+  var img;
+  var customLabels = [];
+  var lastLabelUsed = 'Empty';
+  var currentCoords = {};
+
+  if (source === 'fromUrl') {
+    let url = new URL(document.location.toString());
+    source = url.searchParams.get('url');
+    loadImg(source);
+  } else if (source === 'prompt') {
+    window.document.getElementById('img-loader').style.display = 'flex';
+    window.document.getElementById('load-photo').addEventListener('click', (e) => {
+      let el = window.document.getElementById('img-path');
+      let val = el.value === '' ? el.getAttribute('placeholder'): el.value;
+      if (val == "") {
+        val = el.attr('aria-label');
+      }
+
+      loadImg(val);
+      source = val;
+    });
+
+    window.document.getElementById('local-loader').style.display = 'flex';
+    window.document.getElementById('load-local-photo').addEventListener('click', (e) => {
+      let input = window.document.getElementById('local-img-path');
+      if (input.files && input.files[0]) {
+        let reader = new FileReader();
+        reader.onload = (e) => {
+          loadImg(e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+      }
+    });
+  } else {
+    loadImg(source);
+  }
+  
+  btn.addEventListener('click', (event) => {
+    recordingEnabled = true;
+    window.document.getElementById("export-link").style.display = 'block';
+    exportData.setAttribute('href', 'data:application/octet-stream, x%2Cy%2Ctag%0A');
+    btn.innerText = '{{ $recordinglbl }}';
+  });
+
+  var useLastTagSel = window.document.getElementById('repeat-used-tag');
+  var contextMenu = window.document.getElementById("contextMenu");
+  
+  contextMenu.addEventListener('click', (e) => {
+    let iTag = e.target.innerText;
+    if (e.target === window.document.getElementById('add-new-tag-option')) {
+      contextMenu.style.display = 'none';
+      return;
+    }
+
+    if (e.target === window.document.querySelector('li.dropdown-divider') ||
+      e.target === window.document.querySelector('ul#menu-tags.dropdown-menu')
+    ) {
+      finalizeTag(lastLabelUsed);
+      return;
+    }
+
+    lastLabelUsed = iTag;
+    finalizeTag(lastLabelUsed);
+    contextMenu.style.display = 'none';
+  });
+
+  // Close context menu when clicking outside of it
+  window.document.addEventListener('click', (e) => {
+    // if the target of the click isn't the container nor a descendant of the container
+    if (contextMenu !== e.target && contextMenu.style.display !== 'none') {
+      contextMenu.style.display = 'none';
+    }
+
+  });
+  
+  // Close context menu on Esc key
+  window.document.addEventListener('keyup', (e) => {
+    e = e || window.event
+    if (e.key === 'Escape') {
+      contextMenu.style.display = 'none';
+    }
+  });
+
+  // === Function section ===
+  function loadImg(src) {
+    img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = src;
+    
+    img.onload = () => {
+      BrewingCatsCore.Logger.traceInfo(
+        `Loading custom image`,
+        'component.polygonmaker',
+        'tagId_h',
+        'ComponentInteraction',
+        {
+          'component': 'Polygonmaker',
+          'dimensions': `w:${img.width}  h:${img.height}`
+        }
+      );
+
+      let canvasContainer = window.document.getElementById('canvas-container');
+      let maxWidth = 990;
+      let width = img.width;
+      if (img.width > maxWidth) {
+        width = maxWidth;
+      }
+
+      let canvasHeight = img.height;
+      if (img.width > maxWidth) {
+        canvasHeight = (maxWidth / img.width) * img.height;
+      }
+
+      img.lockUniScaling = true;
+      let div = `<canvas id="img-canvas" style="display: block; margin-left: auto; margin-right:auto; max-width: min-content;" width="${width}" height="${canvasHeight}" ></canvas>`;
+      canvasContainer.innerHTML = div;
+      canvas = window.document.getElementById('img-canvas');
+      ctx = canvas.getContext('2d');
+
+      let scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+      let x = (canvas.width / 2) - (img.width / 2) * scale;
+      let y = (canvas.height / 2) - (img.height / 2) * scale;
+      ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+  
+      btn.removeAttribute('disabled');
+      btn.innerText = '{{ $startlbl }}';
+      clearBtn.removeAttribute('disabled');
+      
+      canvas.addEventListener('click', (event) => {
+        if (!recordingEnabled) {
+          return;
+        }
+
+        if (startPoint.x == -1 && startPoint.y == -1) {
+          startPoint.x = event.offsetX;
+          startPoint.y = event.offsetY;
+          ctx.beginPath();
+          ctx.moveTo(event.offsetX, event.offsetY);
+        } else {
+          ctx.lineTo(event.offsetX, event.offsetY);
+          ctx.stroke();
+        }
+        
+        let pixel = ctx.getImageData(event.offsetX, event.offsetY, 1, 1).data;
+        let elOffX = window.document.getElementById('offsetX');
+        let offsetX = elOffX.value === '' ? 0 : parseInt(elOffX.value);
+        let elOffY = window.document.getElementById('offsetY');
+        let offsetY = elOffY.value === '' ? 0 : parseInt(elOffY.value);
+        let msg = `(${event.offsetX + offsetX}, ${offsetY - event.offsetY}) rgba(${pixel[0]}, ${pixel[1]}, ${pixel[2]}, ${pixel[3] / 255})`;
+        console.log(msg);
+        lbl.innerText = '{{ $pointlbl }}' + `: ${msg}`;
+        let deltaEl = window.document.getElementById('node-size');
+        let deltaItem = deltaEl.value === ''? 10 : parseInt(deltaEl.value);
+        if (deltaItem < 2) {
+          deltaItem = 10;
+        }
+
+        ctx.strokeRect(
+          event.offsetX - parseInt(deltaItem / 2),
+          event.offsetY - parseInt(deltaItem / 2),
+          deltaItem,
+          deltaItem);
+        
+        ctx.moveTo(event.offsetX, event.offsetY);
+        let tag = 'Empty';
+        if (useLastTagSel.checked) {
+          tag = lastLabelUsed;
+        }
+
+        logPoint(event.offsetX + offsetX, offsetY - event.offsetY, tag);
+      });
+
+      // Right click
+      canvas.addEventListener('contextmenu', (event) => {
+        if (!recordingEnabled) {
+          return false;
+        }
+
+        if (startPoint.x == -1 && startPoint.y == -1) {
+          startPoint.x = event.offsetX;
+          startPoint.y = event.offsetY;
+          ctx.beginPath();
+          ctx.moveTo(event.offsetX, event.offsetY);
+        } else {
+          ctx.lineTo(event.offsetX, event.offsetY);
+          ctx.stroke();
+        }
+        
+        let pixel = ctx.getImageData(event.offsetX, event.offsetY, 1, 1).data;
+        let elOffX = window.document.getElementById('offsetX');
+        let elOffY = window.document.getElementById('offsetY');
+        let offsetX = elOffX.value === '' ? 0 : parseInt(elOffX.value);
+        let offsetY = elOffY.value === '' ? 0 : parseInt(elOffY.value);
+        let msg = `(${event.offsetX + offsetX}, ${offsetY - event.offsetY}) rgba(${pixel[0]}, ${pixel[1]}, ${pixel[2]}, ${pixel[3] / 255})`;
+        console.log(msg);
+        lbl.innerText = `{{ $pointlbl }}: ${msg}`;
+        let deltaItem = parseInt(window.document.getElementById('node-size').value);
+        if (isNaN(deltaItem) || deltaItem < 2) {
+          deltaItem = 10;
+        }
+
+        ctx.rect(event.offsetX - parseInt(deltaItem / 2), event.offsetY - parseInt(deltaItem / 2), deltaItem, deltaItem);
+        ctx.stroke();
+        ctx.moveTo(event.offsetX, event.offsetY);
+        contextMenu.style.left = `${event.clientX}px`;
+        contextMenu.style.top = `${event.clientY}px`;
+        contextMenu.style.display = 'block';
+
+        currentCoords = {
+          x: event.offsetX + offsetX,
+          y: offsetY - event.offsetY
+        };
+
+        event.preventDefault();
+      }, false);
+    };
+  }
+
+  function logPoint(x, y, tag) {
+    let clickPoint = window.document.createElement('span');
+    clickPoint.innerHTML = `${x}, ${y}, ${tag}`;
+    let breakEl = window.document.createElement('br');
+    results.appendChild(clickPoint);
+    results.appendChild(breakEl);
+    exportData.setAttribute('href', `${exportData.getAttribute('href')}${x}%2C${y}%2C${encodeURI(tag)}%0A`);
+  }
+
+  function validateKey(e, src) {
+    let val = window.document.getElementById(`offset${src}`).value;
+    if (val == "") {
+      btn.disabled = false;
+      return;
+    }
+
+    if (isNaN(parseInt(val))) {
+      btn.disabled = true;
+    } else {
+      btn.disabled = false;
+    }
+  }
+
+  function clearResults() {
+    results.innerHTML = "";
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let hRatio = canvas.width / img.width;
+    let vRatio = canvas.height / img.height;
+    let ratio  = Math.min ( hRatio, vRatio );
+    ctx.drawImage(img, 0,0, img.width, img.height, 0,0,img.width*ratio, img.height*ratio);
+    startPoint.x = -1;
+    startPoint.y = -1;
+    btn.innerText = '{{ $startlbl }}';
+    recordingEnabled = false;
+  }
+
+  function applyNewTag() {
+    let nTag = window.document.getElementById('new-tag-input-field').value;
+    if (customLabels.indexOf(nTag) === -1) {
+      customLabels.push(nTag);
+      let el = window.document.getElementById('menu-tags');
+      el.innerHTML = `${el.innerHTML}<li><a class="dropdown-item" tabindex="-1">${nTag}</a></li>`;
+    }
+    
+    // Attach event listener
+    lastLabelUsed = nTag;
+    window.document.getElementById('new-tag-input-field').value = '';
+    finalizeTag(nTag);
+  }
+
+  function finalizeTag(tag) {
+    logPoint(currentCoords.x, currentCoords.y, tag);
+  }
+</script>

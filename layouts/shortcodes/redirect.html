@@ -1,0 +1,20 @@
+{{ $destination := cond (.IsNamedParams) (.Get "destination" ) (.Get 0 ) }}
+<p>Redirecting to: {{ $destination }}</p>
+<script type="text/javascript">
+(function() {
+  // your page initialization code here
+  // the DOM will be available here
+  BrewingCatsCore.Logger.traceInfo(
+    `Redirecting`,
+    'component.redirecT',
+    'tagId_1k',
+    'ComponentInteraction',
+    {
+      'component': 'Redirect',
+      'source': window.location,
+      'destination': "{{ $destination }}"
+    });
+
+    window.location.replace("{{ $destination }}");
+ })();
+</script>
