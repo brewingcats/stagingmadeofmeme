@@ -6,42 +6,35 @@
     <description>Recent content in Tags on Made of Meme</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>es</language>
-    <lastBuildDate>Sun, 24 Sep 2023 22:49:46 -0700</lastBuildDate><atom:link href="https://staging.madeofme.me/es/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 24 Sep 2023 22:49:46 -0700</lastBuildDate>
+    <atom:link href="https://staging.madeofme.me/es/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>merch</title>
       <link>https://staging.madeofme.me/es/tags/merch/</link>
       <pubDate>Sun, 24 Sep 2023 22:49:46 -0700</pubDate>
-      
       <guid>https://staging.madeofme.me/es/tags/merch/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>mercancia</title>
       <link>https://staging.madeofme.me/es/tags/mercancia/</link>
       <pubDate>Sun, 24 Sep 2023 21:19:46 -0700</pubDate>
-      
       <guid>https://staging.madeofme.me/es/tags/mercancia/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>site</title>
       <link>https://staging.madeofme.me/es/tags/site/</link>
       <pubDate>Tue, 05 Oct 2021 17:20:17 -0700</pubDate>
-      
       <guid>https://staging.madeofme.me/es/tags/site/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>sitio</title>
       <link>https://staging.madeofme.me/es/tags/sitio/</link>
       <pubDate>Sun, 31 May 2020 17:34:44 -0700</pubDate>
-      
       <guid>https://staging.madeofme.me/es/tags/sitio/</guid>
       <description></description>
     </item>
-    
   </channel>
 </rss>

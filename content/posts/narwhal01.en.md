@@ -20,19 +20,19 @@ Each store has a different variety of products to choose from
   "/images/content/merch/narwhals.jpg"
   "https://www.redbubble.com/shop/ap/144918755"
   "Redbubble Store"
-  "Great product selection. Clothing, cases, prints, bags, mugs." >}}
+  "" >}}
 
   {{< card
   "/images/content/merch/narwhal01/waterbottle.jpg"
   "https://www.pinterest.com/madeofmeme/narwhals-dont-get-mad-teespring/"
   "TeeSpring Store"
-  "Great product selection. Clothing, mugs, totes." >}}
+  "" >}}
 
   {{< card
   "/images/content/merch/narwhal01/sweatshirt2.jpeg"
   "https://www.pinterest.com/madeofmeme/narwhals-dont-get-mad-teespring/"
   "Amazon Store"
-  "Great product selection. Clothes" >}}
+  "" >}}
 
 {{< /cards >}}
 

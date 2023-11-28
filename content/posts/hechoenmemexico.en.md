@@ -7,7 +7,7 @@ type: page
 categories: [merch]
 tags: [merch]
 lang: en
-description: Made in Memexico, Hecho en Memexico!
+description: Made in Me-Mexico!
 ---
 
 {{< big S >}}elect your favorite design
@@ -19,14 +19,14 @@ description: Made in Memexico, Hecho en Memexico!
   {{< card
   "/images/content/merch/HechoEnMemexico2.png"
   "https://www.redbubble.com/shop/ap/152786464"
-  "Redbubble Store"
-  "Great product selection. Clothing, cases, prints, bags, mugs." >}}
+  "Design 1 Store"
+  "" >}}
 
   {{< card
   "/images/content/merch/HechoEnMemexico1.png"
   "https://www.redbubble.com/shop/ap/152786027"
-  "Redbubble Store"
-  "Great product selection. Clothing, cases, prints, bags, mugs." >}}
+  "Design 2 Store"
+  "" >}}
 {{< /cards >}}
 
 {{< scrolltop >}}

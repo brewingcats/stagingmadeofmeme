@@ -2,7 +2,7 @@
 {{ $lang := .Page.Params.lang }}
 {{ $copy := cond (eq $lang "en") "Copy" (cond (eq $lang "es") "Copiar" "Copy") }}
 {{ $copied := cond (eq $lang "en") "Copied!" (cond (eq $lang "es") "Copiado!" "Copied!") }}
-{{ $none := cond (eq $lang "en") "none" (cond (eq $lang "es") "vacío" "none") }}
+{{ $empty := cond (eq $lang "en") "none" (cond (eq $lang "es") "vacío" "none") }}
 {{ $parsed := cond (eq $lang "en") "Parsed!" (cond (eq $lang "es") "Analizado!" "Parsed!") }}
 {{ $invalidCode := cond (eq $lang "en") "Invalid Code" (cond (eq $lang "es") "Código Invalido" "Invalid Code") }}
 {{ $sampleViz := "<div id='defaultVizLoaded'></div><div class='tableauPlaceholder' id='viz1599000528258' style='position: relative'><noscript><a href='#'><img alt=' ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ta&#47;TableauDashboardSample&#47;Dashboard1&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='TableauDashboardSample&#47;Dashboard1' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ta&#47;TableauDashboardSample&#47;Dashboard1&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en' /><param name='filter' value='publish=yes' /></object></div><script type='text/javascript'>var divElement = document.getElementById('viz1599000528258');var vizElement = divElement.getElementsByTagName('object')[0];if ( divElement.offsetWidth > 800 ) { vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';} else if ( divElement.offsetWidth > 500 ) { vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';} else { vizElement.style.width='100%';vizElement.style.height='827px';}var scriptElement = document.createElement('script');scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';vizElement.parentNode.insertBefore(scriptElement, vizElement);</script>" }}
@@ -110,13 +110,13 @@
   }
 
   function ResetValues() {
-    window.document.getElementById('vizIdArea').innerText = `{{ $none }}`;
-    window.document.getElementById('prefixIdArea').innerText = `{{ $none }}`;
-    window.document.getElementById('workbookNameArea').innerText = `{{ $none }}`;
-    window.document.getElementById('worksheetNameArea').innerText = `{{ $none }}`;
-    window.document.getElementById('shortcodeArea').innerText = `{{ $none }}`;
+    window.document.getElementById('vizIdArea').innerText = '{{ $empty }}';
+    window.document.getElementById('prefixIdArea').innerText = '{{ $empty }}';
+    window.document.getElementById('workbookNameArea').innerText = '{{ $empty }}';
+    window.document.getElementById('worksheetNameArea').innerText = '{{ $empty }}';
+    window.document.getElementById('shortcodeArea').innerText = '{{ $empty }}';
     if (window.document.getElementById('defaultVizLoaded') === null) {
-      window.document.getElementById('vizArea').innerHTML = `{{ $sampleViz }}`;
+      window.document.getElementById('vizArea').innerHTML = '{{ $sampleViz }}';
     }
   }
 
@@ -137,11 +137,11 @@
     } else {
       new bootstrap.Tooltip(window.document.getElementById('parseButton')).show();
       let tooltipId = new bootstrap.Tooltip(window.document.getElementById('parseButton')).getAttribute('aria-describedby');
-      window.document.querySelector(`#${tooltipId} div.tooltip-inner`).innerText = `{{ $invalidCode }}`;
+      window.document.querySelector(`#${tooltipId} div.tooltip-inner`).innerText = '{{ $invalidCode }}';
       window.document.getElementById('parseButton').classList.remove('btn-primary');
       window.document.getElementById('parseButton').classList.add('btn-danger');
-  
-      setTimeout(() => { 
+
+      setTimeout(() => {
         bootstrap.Tooltip.getInstance(window.document.getElementById('parseButton')).hide();
         window.document.getElementById('parseButton').classList.remove('btn-danger');
         window.document.getElementById('parseButton').classList.add('btn-primary');
@@ -191,7 +191,7 @@
       {{ end }}
     </span>
   </div>
-  <label id="instagram-postId-code" class="form-control"><code id="vizIdArea">{{ $none }}</code></label>
+  <label id="instagram-postId-code" class="form-control"><code id="vizIdArea">{{ $empty }}</code></label>
   <div class="input-group-append">
     <button class="btn btn-dark" type="button" onclick="CopyToClipboard('vizIdArea', 'copyVizIdArea', 'vizIdAreaBtn', '{{ $copied }}')" id="vizIdAreaBtn"
     data-bs-toggle="tooltip" data-bs-placement="right" title='{{if eq $lang "en" }}Copy Viz ID{{ else if eq $lang "es" }}Copiar Identificador de Viz{{ end }}' data-bs-animation="true" data-trigger="manual">
@@ -211,7 +211,7 @@
     {{ end }}
     </span>
   </div>
-  <label id="instagram-postId-code" class="form-control"><code id="prefixIdArea">{{ $none }}</code></label>
+  <label id="instagram-postId-code" class="form-control"><code id="prefixIdArea">{{ $empty }}</code></label>
   <div class="input-group-append">
     <button class="btn btn-dark" type="button" onclick="CopyToClipboard('prefixIdArea', 'copyPrefixIdArea', 'prefixIdAreaBtn', '{{ $copied }}')" id="prefixIdAreaBtn"
     data-bs-toggle="tooltip" data-bs-placement="right" title='{{if eq $lang "en" }}Copy Prefix{{ else if eq $lang "es" }}Copiar Prefijo{{ end }}' data-bs-animation="true">
@@ -231,7 +231,7 @@
       {{ end }}
     </span>
   </div>
-  <label id="instagram-postId-code" class="form-control"><code id="workbookNameArea">{{ $none }}</code></label>
+  <label id="instagram-postId-code" class="form-control"><code id="workbookNameArea">{{ $empty }}</code></label>
   <div class="input-group-append">
     <button class="btn btn-dark" type="button" onclick="CopyToClipboard('workbookNameArea', 'copyWorkbookNameArea', 'workbookNameAreaBtn', '{{ $copied }}')" id="workbookNameAreaBtn"
     data-bs-toggle="tooltip" data-bs-placement="right" title='{{if eq $lang "en" }}Copy Workbook Name{{ else if eq $lang "es" }}Copiar Nombre del Workbook{{ end }}' data-bs-animation="true">
@@ -251,7 +251,7 @@
       {{ end }}
     </span>
   </div>
-  <label id="instagram-postId-code" class="form-control"><code id="worksheetNameArea">{{ $none }}</code></label>
+  <label id="instagram-postId-code" class="form-control"><code id="worksheetNameArea">{{ $empty }}</code></label>
   <div class="input-group-append">
     <button class="btn btn-dark" type="button" onclick="CopyToClipboard('worksheetNameArea', 'copyWorkbookNameArea', 'worksheetNameAreaBtn', '{{ $copied }}')" id="worksheetNameAreaBtn"
     data-bs-toggle="tooltip" data-bs-placement="right" title='{{if eq $lang "en" }}Copy Worksheet Name{{ else if eq $lang "es" }}Copiar Nombre del Worksheet{{ end }}' data-bs-animation="true">
@@ -271,7 +271,7 @@
       {{ end }}
     </span>
   </div>
-  <label id="instagram-postId-codeUrl" class="form-control"><code id="shortcodeArea">{{ $none }}</code></label>
+  <label id="instagram-postId-codeUrl" class="form-control"><code id="shortcodeArea">{{ $empty }}</code></label>
   <div class="input-group-append">
     <button class="btn btn-dark" type="button" onclick="CopyToClipboard('shortcodeArea', 'copyShortcodeArea', 'shortcodeAreaBtn', '{{ $copied }}')" id="shortcodeAreaBtn"
     data-bs-toggle="tooltip" data-bs-placement="right" title='{{if eq $lang "en" }}Copy ShortCode Call{{ else if eq $lang "es" }}Copiar Código del ShortCode{{ end }}' data-bs-animation="true">
@@ -320,11 +320,11 @@
     } else if ( divElement.offsetWidth > 500 ) {
       vizElement.style.width='100%';
       vizElement.style.height=(divElement.offsetWidth*0.75)+'px';
-    } else { 
+    } else {
       vizElement.style.width='100%';
       vizElement.style.height='827px';
     }
-    
+
     var scriptElement = document.createElement('script');
     scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
     vizElement.parentNode.insertBefore(scriptElement, vizElement);

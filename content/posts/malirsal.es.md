@@ -19,13 +19,13 @@ Cada tienda tiene una selección de productos a escoger distinta
   "/images/content/merch/nadaPuedeMalirSal.jpg"
   "https://www.redbubble.com/shop/ap/146197858"
   "Tienda en línea: Redbubble"
-  "Gran selección de productos. Ropa, accesorios, tazas, impresiones, bolsas." >}}
+  "" >}}
 
   {{< card
   "/images/content/merch/malirsal/malirsaltshirt.jpg"
   "https://www.pinterest.com/madeofmeme/nada-puede-malir-sal-teespring/"
   "Tienda en línea: TeeSpring"
-  "Gran selección de productos. Ropa." >}}
+  "" >}}
 
 {{< /cards >}}
 

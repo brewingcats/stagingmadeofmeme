@@ -19,13 +19,13 @@ Each store has a different variety of products to choose from
   "/images/content/merch/nadaPuedeMalirSal.jpg"
   "https://www.redbubble.com/shop/ap/146197858"
   "Redbubble Store"
-  "Great product selection. Clothing, cases, prints, bags, mugs." >}}
+  "" >}}
 
   {{< card
   "/images/content/merch/malirsal/malirsaltshirt.jpg"
   "https://www.pinterest.com/madeofmeme/nada-puede-malir-sal-teespring/"
   "TeeSpring Store"
-  "Great product selection. Clothing." >}}
+  "" >}}
 
 {{< /cards >}}
 

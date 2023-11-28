@@ -11,6 +11,7 @@ Data schema:
 
 {{ $lang := .Page.Params.lang }}
 {{ $data := index $.Site.Data $.Params.data }}
+{{ $theme_color := $.Page.Site.Params.theme_color }}
 <div id="{{ $.Params.data }}" class="carousel carousel-dark slide carousel-fade" data-bs-ride="carousel" style="width: {{ $.Params.width }}; margin: auto;" >
   <div class="carousel-indicators">
     {{ range (index $data $lang) }}
@@ -62,19 +63,20 @@ Data schema:
     captionUrl.push(url);
     {{ end }}
     url = captionUrl[0];
-    let captionHtml = `<a href="${url}" target="_blank" onclick="BrewingCatsCore.LinkActions.openLink('${url}', '${captions[0]}')" 
-    style="color: rgb(34, 34, 34); box-shadow: rgb({{ $.Page.Site.Params.theme_color }}) 0px -4px 0px inset; text-decoration: none; " 
+    let theme_color = '{{ $theme_color }}'
+    let captionHtml = `<a href="${url}" target="_blank" onclick="BrewingCatsCore.LinkActions.openLink('${url}', '${captions[0]}')"
+    style="color: rgb(34, 34, 34); box-shadow: rgb(${theme_color}) 0px -4px 0px inset; text-decoration: none; "
     onMouseOver="BrewingCatsCore.LinkActions.mouseover(this)"
     onMouseOut="BrewingCatsCore.LinkActions.mouseout(this)">${captions[0]}</a>`;
     if (url === "<none>") {
       captionHtml = `<p style="text-align: center; font-style: italic;">${captions[0]}</p>`;
     }
-    
+
     let carouselLabel = document.getElementById('carousel-label-{{ $.Params.data }}');
     carouselLabel.innerHTML = captionHtml;
     document.getElementById('{{ $.Params.data }}').addEventListener('slide.bs.carousel', (e) => {
-      let innerHTML = `<a href="${captionUrl[e.to]}" target="_blank" onclick="BrewingCatsCore.LinkActions.openLink('${captionUrl[e.to]}', '${captions[e.to]}')" 
-      style="color: rgb(34, 34, 34); box-shadow: rgb({{ $.Page.Site.Params.theme_color }}) 0px -4px 0px inset; text-decoration: none; " 
+      let innerHTML = `<a href="${captionUrl[e.to]}" target="_blank" onclick="BrewingCatsCore.LinkActions.openLink('${captionUrl[e.to]}', '${captions[e.to]}')"
+      style="color: rgb(34, 34, 34); box-shadow: rgb(${theme_color}) 0px -4px 0px inset; text-decoration: none; "
       onMouseOver="BrewingCatsCore.LinkActions.mouseover(this)"
       onMouseOut="BrewingCatsCore.LinkActions.mouseout(this)">${captions[e.to]}</a>`;
       if (captionUrl[e.to] === "<none>") {

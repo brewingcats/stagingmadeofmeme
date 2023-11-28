@@ -22,15 +22,15 @@
   <!-- Load img remotely -->
   <div id="img-loader" class="input-group mb-3" style="display: none;">
     <span class="input-group-text">{{ $imglbl }}</span>
-    <input type="text" id="img-path" class="form-control" 
-    placeholder="https://source.unsplash.com/WLUHO9A_xik" 
+    <input type="text" id="img-path" class="form-control"
+    placeholder="https://source.unsplash.com/WLUHO9A_xik"
     aria-label="https://source.unsplash.com/WLUHO9A_xik"
     aria-describedby="image-text-message">
     <button id="load-photo" type="button" class="btn btn-primary">{{ $loadlbl }}</button>
   </div>
   <!-- Open local img -->
   <div id="local-loader" class="input-group mb-3" style="display: none;">
-    <input type="file" id="local-img-path" class="form-control" 
+    <input type="file" id="local-img-path" class="form-control"
       name="image"
       accept="image/*"
       aria-describedby="image-text-message">
@@ -131,7 +131,7 @@
       }
     );
   });
-  
+
   var canvas;
   var ctx;
   var img;
@@ -171,7 +171,7 @@
   } else {
     loadImg(source);
   }
-  
+
   btn.addEventListener('click', (event) => {
     recordingEnabled = true;
     window.document.getElementById("export-link").style.display = 'block';
@@ -181,7 +181,7 @@
 
   var useLastTagSel = window.document.getElementById('repeat-used-tag');
   var contextMenu = window.document.getElementById("contextMenu");
-  
+
   contextMenu.addEventListener('click', (e) => {
     let iTag = e.target.innerText;
     if (e.target === window.document.getElementById('add-new-tag-option')) {
@@ -209,7 +209,7 @@
     }
 
   });
-  
+
   // Close context menu on Esc key
   window.document.addEventListener('keyup', (e) => {
     e = e || window.event
@@ -223,7 +223,7 @@
     img = new Image();
     img.crossOrigin = 'anonymous';
     img.src = src;
-    
+
     img.onload = () => {
       BrewingCatsCore.Logger.traceInfo(
         `Loading custom image`,
@@ -258,11 +258,11 @@
       let x = (canvas.width / 2) - (img.width / 2) * scale;
       let y = (canvas.height / 2) - (img.height / 2) * scale;
       ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
-  
+
       btn.removeAttribute('disabled');
       btn.innerText = '{{ $startlbl }}';
       clearBtn.removeAttribute('disabled');
-      
+
       canvas.addEventListener('click', (event) => {
         if (!recordingEnabled) {
           return;
@@ -277,7 +277,7 @@
           ctx.lineTo(event.offsetX, event.offsetY);
           ctx.stroke();
         }
-        
+
         let pixel = ctx.getImageData(event.offsetX, event.offsetY, 1, 1).data;
         let elOffX = window.document.getElementById('offsetX');
         let offsetX = elOffX.value === '' ? 0 : parseInt(elOffX.value);
@@ -297,7 +297,7 @@
           event.offsetY - parseInt(deltaItem / 2),
           deltaItem,
           deltaItem);
-        
+
         ctx.moveTo(event.offsetX, event.offsetY);
         let tag = 'Empty';
         if (useLastTagSel.checked) {
@@ -322,7 +322,7 @@
           ctx.lineTo(event.offsetX, event.offsetY);
           ctx.stroke();
         }
-        
+
         let pixel = ctx.getImageData(event.offsetX, event.offsetY, 1, 1).data;
         let elOffX = window.document.getElementById('offsetX');
         let elOffY = window.document.getElementById('offsetY');
@@ -330,7 +330,8 @@
         let offsetY = elOffY.value === '' ? 0 : parseInt(elOffY.value);
         let msg = `(${event.offsetX + offsetX}, ${offsetY - event.offsetY}) rgba(${pixel[0]}, ${pixel[1]}, ${pixel[2]}, ${pixel[3] / 255})`;
         console.log(msg);
-        lbl.innerText = `{{ $pointlbl }}: ${msg}`;
+        let pointlbl = '{{ $pointlbl }}'
+        lbl.innerText = `${pointlbl}: ${msg}`;
         let deltaItem = parseInt(window.document.getElementById('node-size').value);
         if (isNaN(deltaItem) || deltaItem < 2) {
           deltaItem = 10;
@@ -396,7 +397,7 @@
       let el = window.document.getElementById('menu-tags');
       el.innerHTML = `${el.innerHTML}<li><a class="dropdown-item" tabindex="-1">${nTag}</a></li>`;
     }
-    
+
     // Attach event listener
     lastLabelUsed = nTag;
     window.document.getElementById('new-tag-input-field').value = '';

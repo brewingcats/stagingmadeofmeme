@@ -20,14 +20,14 @@ description: ¡Hecho en Meme, en Memexico!
   {{< card
   "/images/content/merch/HechoEnMemexico2.png"
   "https://www.redbubble.com/shop/ap/152786464"
-  "Tienda en línea: Redbubble"
-  "Gran selección de productos. Ropa, accesorios, tazas, impresiones, bolsas." >}}
+  "Tienda en línea: Diseño 1"
+  "" >}}
 
   {{< card
   "/images/content/merch/HechoEnMemexico1.png"
   "https://www.redbubble.com/shop/ap/152786027"
-  "Tienda en línea: Redbubble"
-  "Gran selección de productos. Ropa, accesorios, tazas, impresiones, bolsas." >}}
+  "Tienda en línea: Diseño 2"
+  "" >}}
 {{< /cards >}}
 
 {{< scrolltop >}}

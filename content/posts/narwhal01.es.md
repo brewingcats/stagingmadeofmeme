@@ -21,19 +21,19 @@ Cada tienda tiene una selección de productos a escoger distinta
   "/images/content/merch/narwhals.jpg"
   "https://www.redbubble.com/shop/ap/144918755"
   "Tienda en línea: Redbubble"
-  "Gran selección de productos. Ropa, accesorios, tazas, impresiones, bolsas." >}}
+  "" >}}
 
   {{< card
   "/images/content/merch/narwhal01/waterbottle.jpg"
   "https://www.pinterest.com/madeofmeme/narwhals-dont-get-mad-teespring/"
   "Tienda en línea: TeeSpring"
-  "Gran selección de productos. Ropa, tazas, bolsas." >}}
+  "" >}}
 
   {{< card
   "/images/content/merch/narwhal01/sweatshirt2.jpeg"
   "https://www.pinterest.com/madeofmeme/narwhals-dont-get-mad-teespring/"
   "Tienda en línea: Amazon"
-  "Gran selección de productos. Ropa" >}}
+  "" >}}
 
 {{< /cards >}}
 
