@@ -6,3 +6,7 @@ featured_image: "/images/madeofmemebanner.png"
 ---
 
 *Mercancía Inspirada por Memes*
+
+{{< scriptsrc "/javascript/magic.min.js" >}}
+
+{{< productloader >}}

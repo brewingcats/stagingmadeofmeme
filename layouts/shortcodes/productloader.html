@@ -1,0 +1,73 @@
+{{ $lang := .Page.Params.lang }}
+<script type="text/javascript">
+  (()=> {
+    const messageStore = {
+      'linktree': {
+        'en': 'Link Tree',
+        'es': 'Árbol de Enlaces'
+      },
+      'explore': {
+        'en': 'Explore',
+        'es': 'Explorar'
+      }
+    }
+
+    const localeStore = (id) => {
+      let lang = '{{ .Page.Language }}';
+      return messageStore[id][lang];
+    };
+
+    const loadCards = (data) => {
+      let baseCard = getBaseCard();
+      let cardRoot = baseCard.parentElement;
+      for (let idx = 0; idx < data.data.items.length; idx += 1) {
+        let item = data.data.items[idx];
+        let product = baseCard.cloneNode(true);
+        updateCard(product, item);
+        let refs = product.getElementsByTagName('a');
+
+        cardRoot.insertBefore(product, cardRoot.firstChild);
+      }
+    };
+
+    const updateCard = (card, data) => {
+      let refs = card.getElementsByTagName('a');
+      for (let i = 0; i < refs.length; i++) {
+        refs[i].setAttribute('href', data.url);
+        refs[i].setAttribute('target', '_blank');
+        if (i == (refs.length - 1)) {
+          refs[i].innerText = localeStore('explore');
+        }
+      }
+
+      let imgs = card.getElementsByTagName('img');
+      for (let i = 0; i < imgs.length; i++) {
+        imgs[i].setAttribute('src', data.thumbnail);
+      }
+
+      card.getElementsByClassName('card-title')[0].getElementsByTagName('a')[0].textContent = data.title;
+      let texts = card.getElementsByClassName('card-text');
+      texts[0].textContent = data.description;
+      texts[1].textContent = '';
+    };
+
+    const getBaseCard = () => {
+      let lang = '{{ .Page.Language }}';
+      let baseText = localeStore('linktree');
+      let baseCard = undefined;
+      let links = document.getElementsByTagName('a');
+      for (let i = 0; i < links.length; i++) {
+        let text = links[i].text.replaceAll('\n', '').trim();
+        if (text === baseText) {
+          baseCard = links[i].parentElement.parentElement.parentElement.parentElement;
+          break;
+        }
+      }
+
+      return baseCard;
+    };
+
+    window.Magic.MadeOfMeme.getProducts('{{ .Page.Language }}')
+      .then(data => loadCards(data));
+  })();
+</script>

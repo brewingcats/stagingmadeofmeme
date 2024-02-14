@@ -1,0 +1,12 @@
+{
+  "dependency": [
+    {
+      "path": "/Users/hugobelin/repos/github/magicalindustries/magic",
+      "command": ". ./build.ps1",
+      "sourceFiles": [
+        "dist/magic.min.js"
+      ],
+      "destination": "static/javascript"
+    }
+  ]
+}

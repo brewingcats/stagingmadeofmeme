@@ -1,5 +1,32 @@
-# NOTE: Decide if will run library upgrade to export to this project
+[CmdletBinding()]
+param(
+  # Update libraries or prepare for production
+  [Parameter()]
+  [ValidateSet('UpdateLibs', 'Production')]
+  [string] $Mode = 'Production'
+)
+
+# UpdateLibs = Updates underlying libraries only
+# Production = Update underlying libraries and build project
+
 $ErrorActionPreference = 'Stop'
+
+Push-Location -Path $PSScriptRoot
+try {
+  $configToml = Join-Path -Path $PWD -ChildPath 'config.toml'
+  if (-not (Test-Path $configToml)) {
+    Write-Error -Message ("Invalid Hugo directory. Config file not found: {0}" -f $configToml)
+  }
+
+  Write-Host 'Building Hugo project...'
+  hugo --cleanDestinationDir
+  Write-Host 'Building Hugo project... DONE'
+}
+finally {
+  Pop-Location
+}
+
+# NOTE: Decide if will run library upgrade to export to this project
 $popLocation = $false
 if ($PWD.Path -ne $PSScriptRoot) {
   Write-Host ("Set Location to: {0}" -f $PSScriptRoot)
@@ -7,10 +34,6 @@ if ($PWD.Path -ne $PSScriptRoot) {
   $popLocation = $true
 }
 
-$configToml = Join-Path -Path $PWD -ChildPath 'config.toml'
-if (-not (Test-Path $configToml)) {
-  Write-Error -Message ("Invalid Hugo directory. Config file not found: {0}" -f $configToml)
-}
 
 # Run Hugo Commands for building
 hugo --cleanDestinationDir

@@ -7,7 +7,7 @@
     <title>Made of Meme | Made of Meme</title>
     <meta name="viewport" content="width=device-width,minimum-scale=1">
     <meta name="description" content="Mercancía Inspirada por Memes">
-    <meta name="generator" content="Hugo 0.120.4">
+    <meta name="generator" content="Hugo 0.122.0">
     
     
     
@@ -42,8 +42,7 @@
 <meta property="og:url" content="https://staging.madeofme.me/es/" />
 
 <meta itemprop="name" content="Made of Meme">
-<meta itemprop="description" content="Mercancía Inspirada por Memes"><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Made of Meme"/>
+<meta itemprop="description" content="Mercancía Inspirada por Memes"><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Made of Meme"/>
 <meta name="twitter:description" content="Mercancía Inspirada por Memes"/>
 
     
@@ -213,6 +212,80 @@
       
  <article class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy mid-gray">
     <p><em>Mercancía Inspirada por Memes</em></p>
+<script src="/javascript/magic.min.js" ></script>
+
+<script type="text/javascript">
+  (()=> {
+    const messageStore = {
+      'linktree': {
+        'en': 'Link Tree',
+        'es': 'Árbol de Enlaces'
+      },
+      'explore': {
+        'en': 'Explore',
+        'es': 'Explorar'
+      }
+    }
+
+    const localeStore = (id) => {
+      let lang = 'es';
+      return messageStore[id][lang];
+    };
+
+    const loadCards = (data) => {
+      let baseCard = getBaseCard();
+      let cardRoot = baseCard.parentElement;
+      for (let idx = 0; idx < data.data.items.length; idx += 1) {
+        let item = data.data.items[idx];
+        let product = baseCard.cloneNode(true);
+        updateCard(product, item);
+        let refs = product.getElementsByTagName('a');
+
+        cardRoot.insertBefore(product, cardRoot.firstChild);
+      }
+    };
+
+    const updateCard = (card, data) => {
+      let refs = card.getElementsByTagName('a');
+      for (let i = 0; i < refs.length; i++) {
+        refs[i].setAttribute('href', data.url);
+        refs[i].setAttribute('target', '_blank');
+        if (i == (refs.length - 1)) {
+          refs[i].innerText = localeStore('explore');
+        }
+      }
+
+      let imgs = card.getElementsByTagName('img');
+      for (let i = 0; i < imgs.length; i++) {
+        imgs[i].setAttribute('src', data.thumbnail);
+      }
+
+      card.getElementsByClassName('card-title')[0].getElementsByTagName('a')[0].textContent = data.title;
+      let texts = card.getElementsByClassName('card-text');
+      texts[0].textContent = data.description;
+      texts[1].textContent = '';
+    };
+
+    const getBaseCard = () => {
+      let lang = 'es';
+      let baseText = localeStore('linktree');
+      let baseCard = undefined;
+      let links = document.getElementsByTagName('a');
+      for (let i = 0; i < links.length; i++) {
+        let text = links[i].text.replaceAll('\n', '').trim();
+        if (text === baseText) {
+          baseCard = links[i].parentElement.parentElement.parentElement.parentElement;
+          break;
+        }
+      }
+
+      return baseCard;
+    };
+
+    window.Magic.MadeOfMeme.getProducts('es')
+      .then(data => loadCards(data));
+  })();
+</script>
 
   </article>
   
@@ -242,168 +315,6 @@
           </div>
           <div class="row col-11 container-fluid g-4">
               
-              
-              
-<div class="col">
-  <div class="card h-100" style="width: 24rem;">
-    
-      
-      
-      <a href="https://staging.madeofme.me/es/posts/hechoenmemexico/" class="db grow">
-        <img src="https://staging.madeofme.me/images/content/merch/HechoEnMemexico2.png" class="card-img-top" alt="image from Hecho en Memexico">
-      </a>
-    
-    <div class="card-body">
-      <h5 class="card-title">
-        <a href="https://staging.madeofme.me/es/posts/hechoenmemexico/" class="color-inherit dim link">
-          Hecho en Memexico
-        </a>
-      </h5>
-      <p class="card-text">
-        
-        ¡Hecho en Meme, en Memexico!
-        
-      </p>
-      <p class="card-text text-right"><small class="text-muted">1 min read</small></p>
-      <a href="https://staging.madeofme.me/es/posts/hechoenmemexico/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">Leer más</a>
-    </div>
-  </div>
-</div>
-              
-              
-<div class="col">
-  <div class="card h-100" style="width: 24rem;">
-    
-      
-      
-      <a href="https://staging.madeofme.me/es/posts/biden2024/" class="db grow">
-        <img src="https://staging.madeofme.me/images/content/merch/biden.png" class="card-img-top" alt="image from Biden2024">
-      </a>
-    
-    <div class="card-body">
-      <h5 class="card-title">
-        <a href="https://staging.madeofme.me/es/posts/biden2024/" class="color-inherit dim link">
-          Biden2024
-        </a>
-      </h5>
-      <p class="card-text">
-        
-        Biden 2024, ¡Se acabó la hora de la siesta!
-        
-      </p>
-      <p class="card-text text-right"><small class="text-muted">1 min read</small></p>
-      <a href="https://staging.madeofme.me/es/posts/biden2024/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">Leer más</a>
-    </div>
-  </div>
-</div>
-              
-              
-<div class="col">
-  <div class="card h-100" style="width: 24rem;">
-    
-      
-      
-      <a href="https://staging.madeofme.me/es/posts/bimmer/" class="db grow">
-        <img src="https://staging.madeofme.me/images/content/merch/bimmer.png" class="card-img-top" alt="image from Bimmer">
-      </a>
-    
-    <div class="card-body">
-      <h5 class="card-title">
-        <a href="https://staging.madeofme.me/es/posts/bimmer/" class="color-inherit dim link">
-          Bimmer
-        </a>
-      </h5>
-      <p class="card-text">
-        
-        Bimmer, BMW Motorsports
-        
-      </p>
-      <p class="card-text text-right"><small class="text-muted">1 min read</small></p>
-      <a href="https://staging.madeofme.me/es/posts/bimmer/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">Leer más</a>
-    </div>
-  </div>
-</div>
-              
-              
-<div class="col">
-  <div class="card h-100" style="width: 24rem;">
-    
-      
-      
-      <a href="https://staging.madeofme.me/es/posts/woman/" class="db grow">
-        <img src="https://staging.madeofme.me/images/content/merch/woman-banner.png" class="card-img-top" alt="image from Woman">
-      </a>
-    
-    <div class="card-body">
-      <h5 class="card-title">
-        <a href="https://staging.madeofme.me/es/posts/woman/" class="color-inherit dim link">
-          Woman
-        </a>
-      </h5>
-      <p class="card-text">
-        
-        Sé orgullosa, eres Mujer
-        
-      </p>
-      <p class="card-text text-right"><small class="text-muted">1 min read</small></p>
-      <a href="https://staging.madeofme.me/es/posts/woman/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">Leer más</a>
-    </div>
-  </div>
-</div>
-              
-              
-<div class="col">
-  <div class="card h-100" style="width: 24rem;">
-    
-      
-      
-      <a href="https://staging.madeofme.me/es/posts/malirsal/" class="db grow">
-        <img src="https://staging.madeofme.me/images/content/merch/nadaPuedeMalirSal-header.jpg" class="card-img-top" alt="image from Nada puede Malir Sal">
-      </a>
-    
-    <div class="card-body">
-      <h5 class="card-title">
-        <a href="https://staging.madeofme.me/es/posts/malirsal/" class="color-inherit dim link">
-          Nada puede Malir Sal
-        </a>
-      </h5>
-      <p class="card-text">
-        
-        Nada puede Malir Sal... Salir Mal
-        
-      </p>
-      <p class="card-text text-right"><small class="text-muted">1 min read</small></p>
-      <a href="https://staging.madeofme.me/es/posts/malirsal/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">Leer más</a>
-    </div>
-  </div>
-</div>
-              
-              
-<div class="col">
-  <div class="card h-100" style="width: 24rem;">
-    
-      
-      
-      <a href="https://staging.madeofme.me/es/posts/narwhal01/" class="db grow">
-        <img src="https://staging.madeofme.me/images/content/merch/narwhals.jpg" class="card-img-top" alt="image from Los Narvales No Se Enojan">
-      </a>
-    
-    <div class="card-body">
-      <h5 class="card-title">
-        <a href="https://staging.madeofme.me/es/posts/narwhal01/" class="color-inherit dim link">
-          Los Narvales No Se Enojan
-        </a>
-      </h5>
-      <p class="card-text">
-        
-        Los Narvales No Se Enojan, Se Ponen a Mano
-        
-      </p>
-      <p class="card-text text-right"><small class="text-muted">1 min read</small></p>
-      <a href="https://staging.madeofme.me/es/posts/narwhal01/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">Leer más</a>
-    </div>
-  </div>
-</div>
               
               
 <div class="col">
@@ -507,7 +418,7 @@
   <div class="flex justify-between">
     <div>
       <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://staging.madeofme.me/" >
-        &copy;  Made of Meme 2023 
+        &copy;  Made of Meme 2024 
       </a>
       <code class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3">
         
